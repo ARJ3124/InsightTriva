@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insight Trivia - Professional Assessment & Quiz Platform</title>
+  <!-- Google Fonts: Outfit (headings) and Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Puter.js SDK for free local-inference AI API -->
+  <script src="https://js.puter.com/v2/"></script>
+</head>
+<body>
+
+  <!-- Background Grid Effect -->
+  <div class="bg-grid"></div>
+
+  <!-- Main Navigation Header -->
+  <header class="app-header">
+    <div class="header-logo" id="header-logo-btn">
+      <span class="logo-icon">▲</span>
+      <span class="logo-text">Insight <span class="accent-text">Trivia</span></span>
+    </div>
+    
+    <div class="header-controls">
+      <!-- Mute Control -->
+      <button class="header-btn" id="mute-btn" title="Toggle Sound">
+        <svg id="volume-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+      </button>
+
+      <!-- Profile Quick View -->
+      <div class="profile-pill" id="profile-pill">
+        <div class="profile-badge-small" id="header-profile-badge">▲</div>
+        <span class="profile-name-small" id="header-profile-name">Guest Player</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Banner -->
+  <div id="toast-notification" class="toast-notification">Notification message</div>
+
+  <!-- VIEW 1: HOME VIEW (Dashboard) -->
+  <main id="home-view" class="view active">
+    <div class="dashboard-container">
+      
+      <!-- Welcome & Join Session Module -->
+      <section class="hero-section">
+        <div class="hero-card">
+          <div class="hero-left">
+            <h1 class="hero-title">Assess and Elevate Your Knowledge</h1>
+            <p class="hero-subtitle">Engage in timed challenges or complete self-paced assessments across key business and science topics.</p>
+            
+            <!-- Join Session Form -->
+            <div class="join-session-container">
+              <input type="text" id="join-code-input" class="join-input" placeholder="Enter 6-digit Join Code" maxlength="6" autocomplete="off">
+              <button id="join-btn" class="primary-btn">Join Session</button>
+            </div>
+            <div class="error-msg" id="join-error-msg"></div>
+          </div>
+          
+          <div class="hero-right">
+            <!-- Profile Settings Panel -->
+            <div class="profile-settings-card">
+              <h3 class="panel-title">User Settings</h3>
+              <div class="avatar-preview-container">
+                <div class="avatar-display" id="settings-avatar-display">▲</div>
+                <button class="avatar-nav-btn prev" id="avatar-prev" title="Previous Badge">◀</button>
+                <button class="avatar-nav-btn next" id="avatar-next" title="Next Badge">▶</button>
+              </div>
+              <div class="username-input-container">
+                <label for="username-input">Display Name</label>
+                <input type="text" id="username-input" value="Guest Player" maxlength="15" autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action Utilities Bar -->
+      <section class="utilities-section">
+        <div class="section-header">
+          <h2 class="section-title">Assessment Creators</h2>
+          <p class="section-desc">Create custom questionnaires or generate a syllabus dynamically.</p>
+        </div>
+        <div class="utilities-grid">
+          <div class="utility-card" id="open-creator-btn">
+            <div class="utility-icon">🛠️</div>
+            <div class="utility-info">
+              <h3>Custom Assessment Builder</h3>
+              <p>Design a manual quiz with customized questions, answers, and tracking configurations.</p>
+            </div>
+            <span class="arrow-indicator">→</span>
+          </div>
+          
+          <div class="utility-card" id="open-ai-generator-btn">
+            <div class="utility-icon">🤖</div>
+            <div class="utility-info">
+              <h3>AI Quiz Generator</h3>
+              <p>Type any topic and dynamically compile a structured 5-question trivia challenge.</p>
+            </div>
+            <span class="arrow-indicator">→</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Built-in Pre-made Quizzes Section -->
+      <section class="quizzes-section">
+        <div class="section-header">
+          <h2 class="section-title">Standard Trivia Subjects</h2>
+          <p class="section-desc">Select a topic below to launch a structured learning session.</p>
+        </div>
+        
+        <div class="quiz-grid" id="premade-quiz-grid">
+          <!-- Dynamic cards inserted here by app.js -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- VIEW 2: LOBBY VIEW -->
+  <main id="lobby-view" class="view">
+    <div class="lobby-container">
+      <div class="lobby-card">
+        <div class="lobby-header">
+          <span class="lobby-status">Initializing Session</span>
+          <h2 class="lobby-title" id="lobby-quiz-title">General Science & Technology</h2>
+          <p class="lobby-desc" id="lobby-quiz-desc">Assessment parameters: 10 questions. Objective evaluation.</p>
+        </div>
+
+        <div class="lobby-split">
+          <!-- Left side: Session Info & Start Option -->
+          <div class="lobby-controls-panel">
+            <div class="lobby-settings-summary">
+              <div class="setting-row">
+                <span class="label">Total Questions:</span>
+                <span class="value" id="lobby-questions-count">10</span>
+              </div>
+              <div class="setting-row">
+                <span class="label">Session Mode:</span>
+                <span class="value" id="lobby-mode-display">Timed Challenge</span>
+              </div>
+            </div>
+
+
+
+
+
+            <!-- Max Real Players Selector (Host only) -->
+            <div class="lobby-max-players-container" id="lobby-max-players-container">
+              <label for="lobby-max-players">Max Real Participants Limit:</label>
+              <select id="lobby-max-players" class="candidates-select">
+                <option value="0" selected>Unlimited Participants</option>
+                <option value="2">2 Players</option>
+                <option value="5">5 Players</option>
+                <option value="10">10 Players</option>
+                <option value="20">20 Players</option>
+                <option value="50">50 Players</option>
+                <option value="100">100 Players</option>
+              </select>
+            </div>
+
+            <button id="start-game-btn" class="primary-btn large-btn">Launch Session</button>
+            <button id="lobby-cancel-btn" class="secondary-btn">Return to Dashboard</button>
+
+            <!-- Sample Questions Preview -->
+            <div class="lobby-sample-questions" id="lobby-sample-questions">
+              <h4>📋 Quiz Syllabus Preview</h4>
+              <div id="sample-questions-list" class="sample-questions-list">
+                <!-- Will be dynamically populated with sample questions -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right side: Participants Board -->
+          <div class="lobby-participants-panel">
+            <div class="participants-header">
+              <h3>Participants Joined (<span id="participant-count">1</span>)</h3>
+              <div class="lobby-loader" id="lobby-loader-dots"></div>
+            </div>
+            <div class="participants-grid" id="participants-list">
+              <!-- Dynamically populated players/bots -->
+            </div>
+            <div class="lobby-activity-log" id="lobby-activity-log">
+              <p class="log-entry">Waiting for participants to connect...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 3: GAME PLAY VIEW -->
+  <main id="game-view" class="view">
+    <div class="game-container">
+      
+      <!-- Top Scorebar & HUD -->
+      <div class="game-hud">
+        <div class="hud-left">
+          <div class="question-tracker">Question <span id="current-q-num">1</span> of <span id="total-q-num">10</span></div>
+          <div class="hud-score-box">Score: <span id="current-score">0</span></div>
+        </div>
+
+        <!-- Timer / Pacing Indicator -->
+        <div class="timer-container" id="game-timer-container">
+          <div class="timer-bar" id="game-timer-bar"></div>
+        </div>
+
+        <div class="hud-right">
+          <!-- Streak Indicator -->
+          <div class="streak-multiplier" id="streak-badge">
+            <span class="streak-fire">🔥</span> Streak: <span id="streak-count">0</span> (<span id="multiplier-display">1.0</span>x)
+          </div>
+        </div>
+      </div>
+
+      <div class="game-layout">
+        <!-- Main Quiz Arena -->
+        <div class="quiz-arena">
+          
+          <!-- Question Box -->
+          <div class="question-card">
+            <h2 id="game-question-text">Loading question content...</h2>
+          </div>
+
+          <!-- Answer Grid -->
+          <div class="answers-grid" id="game-answers-grid">
+            <!-- 4 option cards created dynamically -->
+            <button class="answer-card option-0" data-index="0">
+              <span class="option-marker">A</span>
+              <span class="option-text">Option Content A</span>
+            </button>
+            <button class="answer-card option-1" data-index="1">
+              <span class="option-marker">B</span>
+              <span class="option-text">Option Content B</span>
+            </button>
+            <button class="answer-card option-2" data-index="2">
+              <span class="option-marker">C</span>
+              <span class="option-text">Option Content C</span>
+            </button>
+            <button class="answer-card option-3" data-index="3">
+              <span class="option-marker">D</span>
+              <span class="option-text">Option Content D</span>
+            </button>
+          </div>
+
+          <!-- Power-ups Console -->
+          <div class="powerups-console" id="powerups-console">
+            <h4 class="console-label">Available Session Assists:</h4>
+            <div class="powerups-row">
+              <button class="powerup-btn" id="pw-5050" title="Remove two incorrect options">
+                <span class="pw-icon">⚖️</span>
+                <span class="pw-name">Clarity (50:50)</span>
+                <span class="pw-count" id="pw-count-5050">1</span>
+              </button>
+              
+              <button class="powerup-btn" id="pw-double" title="Multiply points on this question">
+                <span class="pw-icon">⚡</span>
+                <span class="pw-name">Double Points</span>
+                <span class="pw-count" id="pw-count-double">1</span>
+              </button>
+
+              <button class="powerup-btn" id="pw-shield" title="Shield your streak from an incorrect answer">
+                <span class="pw-icon">🛡️</span>
+                <span class="pw-name">Streak Shield</span>
+                <span class="pw-count" id="pw-count-shield">1</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Host Dashboard (visible only during live hosting) -->
+          <div class="host-dashboard" id="host-control-console" style="display: none;">
+
+            <!-- Status Banner -->
+            <div class="host-status-banner" id="host-status-banner">
+              <span class="host-status-dot" id="host-status-dot"></span>
+              <span id="host-status-text">Session Live</span>
+              <span class="host-question-badge">Question <span id="host-q-num">1</span> / <span id="host-total-q">?</span></span>
+            </div>
+
+            <!-- Live Stats Row -->
+            <div class="host-stats-row">
+              <div class="host-stat-box">
+                <span class="host-stat-val" id="host-answered-count">0</span>
+                <span class="host-stat-label">Answered</span>
+              </div>
+              <div class="host-stat-box">
+                <span class="host-stat-val" id="host-total-players">0</span>
+                <span class="host-stat-label">Players</span>
+              </div>
+              <div class="host-stat-box">
+                <span class="host-stat-val" id="host-time-left">–</span>
+                <span class="host-stat-label">Seconds Left</span>
+              </div>
+            </div>
+
+            <!-- Control Buttons Grid -->
+            <div class="host-controls-grid">
+
+              <button id="host-pause-btn" class="host-ctrl-btn pause-btn">
+                <span class="ctrl-icon">⏸</span>
+                <span class="ctrl-label">Pause</span>
+              </button>
+
+              <button id="host-skip-timer-btn" class="host-ctrl-btn skip-btn">
+                <span class="ctrl-icon">⏭</span>
+                <span class="ctrl-label">Skip Timer</span>
+              </button>
+
+              <button id="host-leaderboard-btn" class="host-ctrl-btn lb-btn">
+                <span class="ctrl-icon">🏆</span>
+                <span class="ctrl-label">Leaderboard</span>
+              </button>
+
+            </div>
+
+            <!-- Live Answer Preview (who answered) -->
+            <div class="host-answered-list" id="host-answered-list"></div>
+
+          </div>
+        </div>
+
+        <!-- Sidebar: Live Session Standings -->
+        <aside class="sidebar-leaderboard">
+          <div class="leaderboard-header">
+            <h3>Session Leaderboard</h3>
+            <button class="header-text-btn" id="toggle-sidebar-leaderboard">Hide</button>
+          </div>
+          <div class="leaderboard-list" id="sidebar-leaderboard-list">
+            <!-- Dynamically populated rankings -->
+          </div>
+        </aside>
+      </div>
+
+    </div>
+
+    <!-- FEEDBACK OVERLAY (Correct / Incorrect Modal Card) -->
+    <div id="feedback-overlay" class="feedback-overlay">
+      <div class="feedback-card" id="feedback-card">
+        <div class="feedback-status-icon" id="feedback-icon">✔</div>
+        <h2 class="feedback-heading" id="feedback-title">Correct Answer</h2>
+        <div class="feedback-points" id="feedback-points-gain">+320 Points</div>
+        
+        <div class="feedback-details" id="feedback-explanation-box">
+          <p>Additional details or correct choice verification goes here.</p>
+        </div>
+
+        <button class="primary-btn" id="feedback-continue-btn" style="display: none;">Continue</button>
+        <button class="primary-btn" id="host-skip-btn" style="display: none; background: var(--accent-color); margin-top: 10px; width: 100%;">Next Question (Host Only) ➔</button>
+        <div class="feedback-wait-message" id="feedback-wait-msg" style="font-size: 13px; color: var(--text-muted); margin-top: 12px; font-weight: 500;">Waiting for host...</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 4: CREATOR VIEW (Assessment Builder) -->
+  <main id="creator-view" class="view">
+    <div class="creator-container">
+      <div class="back-link-bar">
+        <button class="back-btn" id="creator-back-btn">← Back to Dashboard</button>
+      </div>
+
+      <div class="creator-layout">
+        <!-- Sidebar Navigation for Creator -->
+        <aside class="creator-sidebar">
+          <div class="creator-modes">
+            <button class="creator-tab active" id="tab-manual">Manual Builder</button>
+            <button class="creator-tab" id="tab-ai">AI Quiz Compiler</button>
+          </div>
+          <div class="creator-help">
+            <h4>Assessment Guidelines</h4>
+            <p>Maintain clear and objective questions. Each question must contain four distinct possibilities with exactly one correct option selected.</p>
+          </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <div class="creator-workspace">
+          
+          <!-- TAB 1: MANUAL BUILDER FORM -->
+          <div id="panel-manual" class="creator-panel active">
+            <h2 class="workspace-title">Design Custom Assessment</h2>
+            
+            <div class="form-group">
+              <label for="manual-title">Assessment Title</label>
+              <input type="text" id="manual-title" placeholder="e.g. Project Architecture Basics" maxlength="40">
+            </div>
+
+            <div class="form-group row-group">
+              <div>
+                <label for="manual-category">Category</label>
+                <select id="manual-category">
+                  <option value="General Knowledge">General Knowledge</option>
+                  <option value="Programming">Programming</option>
+                  <option value="Geography">Geography</option>
+                  <option value="Politics">Politics</option>
+                  <option value="Aptitude">Aptitude</option>
+                  <option value="English">English</option>
+                  <option value="Science & Tech">Science & Tech</option>
+                  <option value="Art & Literature">Art & Literature</option>
+                  <option value="History & Culture">History & Culture</option>
+                  <option value="Business & Economics">Business & Economics</option>
+                  <option value="Sports & Entertainment">Sports & Entertainment</option>
+                  <option value="Other">Other Category</option>
+                </select>
+              </div>
+              <div>
+                <label for="manual-icon">Subject Icon (Emoji)</label>
+                <input type="text" id="manual-icon" value="📝" maxlength="2" style="width: 80px; text-align: center;">
+              </div>
+            </div>
+
+            <hr class="separator">
+
+            <!-- Question Creation Sub-form -->
+            <div class="questions-builder-container">
+              <div class="builder-section-header">
+                <h3>Syllabus Questions (<span id="creator-added-count">0</span> added)</h3>
+                <div style="display: flex; gap: 12px;">
+                  <button type="button" class="text-link-btn" id="load-samples-btn" style="color: var(--accent-color);">Load Samples</button>
+                  <button type="button" class="text-link-btn" id="clear-questions-btn">Clear All</button>
+                </div>
+              </div>
+
+              <!-- List of added questions -->
+              <div class="added-questions-list" id="added-questions-preview-list">
+                <p class="no-items-msg">No questions added yet. Construct your first question below.</p>
+              </div>
+
+              <!-- Input form for a single question -->
+              <div class="question-input-card">
+                <h4>Construct Question</h4>
+                
+                <div class="form-group">
+                  <label for="q-input-text">Question Prompt</label>
+                  <input type="text" id="q-input-text" placeholder="e.g., What is the primary function of a reverse proxy?">
+                </div>
+
+                <div class="options-inputs">
+                  <label>Options (Select the correct answer button on the left)</label>
+                  
+                  <div class="option-input-row">
+                    <input type="radio" name="correct-option-radio" value="0" checked id="radio-0">
+                    <input type="text" id="opt-input-0" class="opt-input" placeholder="Option A">
+                  </div>
+                  
+                  <div class="option-input-row">
+                    <input type="radio" name="correct-option-radio" value="1" id="radio-1">
+                    <input type="text" id="opt-input-1" class="opt-input" placeholder="Option B">
+                  </div>
+                  
+                  <div class="option-input-row">
+                    <input type="radio" name="correct-option-radio" value="2" id="radio-2">
+                    <input type="text" id="opt-input-2" class="opt-input" placeholder="Option C">
+                  </div>
+                  
+                  <div class="option-input-row">
+                    <input type="radio" name="correct-option-radio" value="3" id="radio-3">
+                    <input type="text" id="opt-input-3" class="opt-input" placeholder="Option D">
+                  </div>
+                </div>
+
+                <button type="button" class="secondary-btn" id="add-question-to-list-btn">Add Question to Quiz</button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="primary-btn large-btn" id="save-quiz-btn">Finalize & Save Assessment</button>
+            </div>
+          </div>
+
+          <!-- TAB 2: AI COMPILER PANEL -->
+          <div id="panel-ai" class="creator-panel">
+            <h2 class="workspace-title">AI Quiz Generator</h2>
+            <p class="panel-subtitle">Generate custom, curriculum-aligned trivia evaluations instantly utilizing the local syntax synthesis engine.</p>
+            
+            <div class="ai-prompt-box">
+              <div class="form-group">
+                <label for="ai-topic-prompt">Target Topic or Keywords</label>
+                <input type="text" id="ai-topic-prompt" placeholder="e.g., JavaScript engines, Space missions, Ancient Rome..." maxlength="30">
+              </div>
+              <div class="form-group" style="flex: 0 0 160px;">
+                <label for="ai-question-count">No. of Questions</label>
+                <select id="ai-question-count" class="candidates-select" style="height: 40px; padding: 0 10px; width: 100%; font-family: var(--font-primary); font-size: 14px; border: 1px solid var(--card-border); border-radius: var(--radius-md);">
+                  <option value="3">3 Questions</option>
+                  <option value="5" selected>5 Questions</option>
+                  <option value="10">10 Questions</option>
+                  <option value="15">15 Questions</option>
+                  <option value="20">20 Questions</option>
+                </select>
+              </div>
+              <button type="button" class="primary-btn" id="ai-generate-btn" style="height: 40px;">Generate Questions</button>
+            </div>
+
+            <!-- Loader / Results view -->
+            <div class="ai-compiler-loader" id="ai-loader">
+              <div class="spinner"></div>
+              <p>Analyzing topic taxonomy and drafting assessment options...</p>
+            </div>
+
+            <div class="ai-compiler-result" id="ai-result-box">
+              <div class="success-banner">
+                <span class="success-icon">✔</span>
+                <div>
+                  <h4>Compilation Successful</h4>
+                  <p>A structured <span id="ai-result-count-label">5</span>-question evaluation is ready.</p>
+                </div>
+              </div>
+
+              <div class="result-details">
+                <div class="result-title-row">
+                  <span class="result-icon" id="ai-result-icon">🤖</span>
+                  <div>
+                    <h3 id="ai-result-title">Syllabus Title</h3>
+                    <p id="ai-result-desc">Description</p>
+                  </div>
+                </div>
+
+                <div class="join-code-reveal">
+                  <span class="label">Join Code:</span>
+                  <strong class="code-text" id="ai-result-code">000000</strong>
+                  <span class="copy-hint" id="ai-copy-hint">Click code to copy</span>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" class="primary-btn" id="ai-play-now-btn">Launch Immediately</button>
+                <button type="button" class="secondary-btn" id="ai-reset-btn">Compile Another Topic</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 5: REPORT VIEW (Assessment Report) -->
+  <main id="report-view" class="view">
+    <div class="report-container">
+      <div class="report-card">
+        
+        <div class="report-header">
+          <span class="report-date" id="report-timestamp">July 6, 2026</span>
+          <h2>Assessment Summary</h2>
+          <p id="report-quiz-title">Science & Technology Quiz</p>
+        </div>
+
+        <div class="report-metrics-grid">
+          <!-- Circular Accuracy Chart -->
+          <div class="metric-circle-card">
+            <div class="accuracy-circle-container">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" class="circle-bg" />
+                <circle cx="60" cy="60" r="50" class="circle-progress" id="report-accuracy-ring" stroke-dasharray="314" stroke-dashoffset="314" />
+              </svg>
+              <div class="accuracy-percentage" id="report-accuracy-text">0%</div>
+            </div>
+            <h4>Accuracy Rating</h4>
+          </div>
+
+          <!-- Quick Stats Tiles -->
+          <div class="metric-tile">
+            <span class="tile-icon">🏆</span>
+            <div class="tile-content">
+              <span class="tile-label">Final Standing</span>
+              <span class="tile-val" id="report-standing">1st Place</span>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <span class="tile-icon">🎯</span>
+            <div class="tile-content">
+              <span class="tile-label">Accumulated Score</span>
+              <span class="tile-val" id="report-score">0</span>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <span class="tile-icon">🔥</span>
+            <div class="tile-content">
+              <span class="tile-label">Maximum Streak</span>
+              <span class="tile-val" id="report-max-streak">0</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="separator">
+
+        <!-- Question breakdown list -->
+        <div class="question-breakdown-section">
+          <h3>Detailed Question Review</h3>
+          <div class="breakdown-list" id="report-questions-breakdown">
+            <!-- Filled dynamically with correct/incorrect markers and answers -->
+          </div>
+        </div>
+
+        <div class="report-actions">
+          <button class="primary-btn large-btn" id="report-retry-btn">Re-attempt Assessment</button>
+          <button class="secondary-btn" id="report-home-btn">Return to Dashboard</button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Confetti Canvas -->
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+  <!-- Application logic scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="app.js?v=1.8"></script>
+</body>
+</html>

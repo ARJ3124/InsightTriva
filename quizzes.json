@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ai-917805",
+    "title": "Ramayana Epic Mythology",
+    "icon": "🤖",
+    "category": "AI Generated",
+    "description": "AI-generated quiz about Rama's life, Sita's exile, Valmiki's epic, and characters of Ramayana.",
+    "questions": [
+      {
+        "question": "Who wrote the ancient epic scripture Ramayana?",
+        "options": [
+          "Sage Valmiki",
+          "Sage Vyasa",
+          "Tulsidas",
+          "Kalidasa"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "question": "Rama was the prince of which ancient kingdom?",
+        "options": [
+          "Mithila",
+          "Lanka",
+          "Ayodhya",
+          "Kishkindha"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "question": "Who abducted Sita and took her to Lanka?",
+        "options": [
+          "Maricha",
+          "Ravana",
+          "Kumbhakarna",
+          "Indrajit"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Which bird tried to stop Ravana from abducting Sita?",
+        "options": [
+          "Jatayu",
+          "Sampati",
+          "Garuda",
+          "Kakabhushundi"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "question": "What was the name of the forest where Rama, Sita, and Lakshmana lived during exile?",
+        "options": [
+          "Naimisharanya",
+          "Dandakaranya",
+          "Chitrakoot",
+          "Panchavati"
+        ],
+        "answerIndex": 1
+      }
+    ],
+    "joinCode": "917805"
+  }
+]
