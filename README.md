@@ -1,1 +1,1 @@
-# Triva
+# InsightTriva
