@@ -1,62 +1,62 @@
 [
   {
-    "id": "ai-917805",
-    "title": "Ramayana Epic Mythology",
+    "id": "ai-204414",
+    "title": "Ramanaym Principles",
     "icon": "🤖",
     "category": "AI Generated",
-    "description": "AI-generated quiz about Rama's life, Sita's exile, Valmiki's epic, and characters of Ramayana.",
+    "description": "A dynamically compiled assessment focusing on the core principles of Ramanaym.",
     "questions": [
       {
-        "question": "Who wrote the ancient epic scripture Ramayana?",
+        "question": "Which of the following is considered a key foundational principle of Ramanaym?",
         "options": [
-          "Sage Valmiki",
-          "Sage Vyasa",
-          "Tulsidas",
-          "Kalidasa"
+          "Systematic definition of concepts",
+          "Relying entirely on historical conventions",
+          "Ad-hoc application without standard framework",
+          "Subjective validation based on personal opinion"
         ],
         "answerIndex": 0
       },
       {
-        "question": "Rama was the prince of which ancient kingdom?",
+        "question": "What is a primary objective or benefit of studying Ramanaym?",
         "options": [
-          "Mithila",
-          "Lanka",
-          "Ayodhya",
-          "Kishkindha"
-        ],
-        "answerIndex": 2
-      },
-      {
-        "question": "Who abducted Sita and took her to Lanka?",
-        "options": [
-          "Maricha",
-          "Ravana",
-          "Kumbhakarna",
-          "Indrajit"
-        ],
-        "answerIndex": 1
-      },
-      {
-        "question": "Which bird tried to stop Ravana from abducting Sita?",
-        "options": [
-          "Jatayu",
-          "Sampati",
-          "Garuda",
-          "Kakabhushundi"
+          "Achieving structured analytical clarity",
+          "Memorizing arbitrary dates and facts",
+          "Replicating legacy system failures",
+          "Increasing system complexity unnecessarily"
         ],
         "answerIndex": 0
       },
       {
-        "question": "What was the name of the forest where Rama, Sita, and Lakshmana lived during exile?",
+        "question": "Which term best describes the core methodology commonly applied in Ramanaym?",
         "options": [
-          "Naimisharanya",
-          "Dandakaranya",
-          "Chitrakoot",
-          "Panchavati"
+          "Empirical observation and logic",
+          "Random selection and chance",
+          "Strict adherence to folklore",
+          "Superficial visual formatting"
         ],
-        "answerIndex": 1
+        "answerIndex": 0
+      },
+      {
+        "question": "What is considered a common best practice when working within the scope of Ramanaym?",
+        "options": [
+          "Continuously refining quality and logic",
+          "Avoiding peer review and documentation",
+          "Restricting research to a single source",
+          "Using unverified data as ground truth"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "question": "What is a frequent challenge faced by beginners studying Ramanaym?",
+        "options": [
+          "Grasping complex abstract formulations",
+          "Finding basic learning resources",
+          "Communicating with other researchers",
+          "Accessing computational standard software"
+        ],
+        "answerIndex": 0
       }
     ],
-    "joinCode": "917805"
+    "joinCode": "204414"
   }
 ]
